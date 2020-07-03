@@ -9,7 +9,7 @@ import Bedroom from '../Bedroom'
 import Box from '../Box'
 import CameraControls from '../CameraControls'
 import { Canvas } from 'react-three-fiber'
-import { Container, Row, Col, Card, CardBody, CardTitle } from 'reactstrap';
+import { Container, Row, Col, Card, Button } from 'reactstrap'
 
 const RoomControls = () => {
     const [clicked, setClick] = useState(false)
@@ -18,9 +18,34 @@ const RoomControls = () => {
     const [toggleTV, setToggleTV] = useState(false)
     const [toggleWeather, setToggleWeather] = useState(false)
 
+    const changeStateByVoice = (voice) => {
+        if (voice === "Bật đèn") {
+            setToggleLamp(true)
+        }
+        else if (voice === "Tắt đèn") {
+            setToggleLamp(false)
+        }
+        else if (voice === "Bật tivi") {
+            setToggleTV(true)
+        }
+        else if (voice === "Tắt tivi") {
+            setToggleTV(false)
+        }
+        else if (voice === "Nghe nhạc") {
+            setToggleSpeaker(true)
+        }
+        else if (voice === "Thời tiết") {
+            setToggleWeather(true)
+        }
+        else if (voice === "Tắt loa") {
+            setToggleSpeaker(false)
+            setToggleWeather(false)
+        }
+    }
+
     return (
         <>
-            {!clicked && <button onClick={() => setClick(true)}>Load Bedroom</button>}
+            {!clicked && <Button color="info" onClick={() => setClick(true)}>Load Bedroom</Button>}
             <Container fluid>
                 <Row style={{ height: '100vh' }}>
                     <Col xs="10">
@@ -30,7 +55,7 @@ const RoomControls = () => {
                             <spotLight intensity={0.2} position={[200, 600, 200]} />
                             <Suspense
                                 fallback={<Box />}>
-                                {clicked && <Bedroom position={[16, -20, 0]} turnOnLamp={toggleLamp} />}
+                                {clicked && <Bedroom position={[16, -20, 0]} turnOnLamp={toggleLamp} turnOnTV={toggleTV} />}
                             </Suspense>
                         </Canvas>
                     </Col>
@@ -67,16 +92,9 @@ const RoomControls = () => {
                                 handleToggle={() => setToggleWeather(!toggleWeather)}
                             />
                         </Card>
-                        <div style={{ paddingBottom: 100 }}></div>
+                        <div style={{ paddingBottom: 30 }}></div>
 
-                        <Record/>
-                        {/* <Card>
-                            <CardBody>
-                                <CardTitle>Điều khiển bằng giọng nói</CardTitle>
-                            </CardBody>
-                            <CardBody>
-                            </CardBody>
-                        </Card> */}
+                        <Record changeRoomStateByVoice={changeStateByVoice} />
                     </Col>
                 </Row>
             </Container>

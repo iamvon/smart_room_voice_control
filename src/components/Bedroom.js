@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { TextureLoader } from 'three/src/loaders/TextureLoader.js'
 import { useLoader } from 'react-three-fiber'
-import bedroom_model from './models/bedroom-v3.glb'
+import bedroomModel from './models/bedroom-v3.glb'
+import vtvGif from './models/wlop.jpg'
 import FakeSphere from './FakeSphere'
 
 function Bedroom(props) {
-    // const bedroom = useLoader(GLTFLoader, bedroom_model)
+    // const bedroom = useLoader(GLTFLoader, bedroomModel)
     // console.log(bedroom.scene)
     // bedroom.scene.castShadow = true
 
@@ -15,11 +17,22 @@ function Bedroom(props) {
     const dem_color = "#ffd2ba"
     const goi_1_color = "#b58969"
     const goi_2_color = "#cd853f"
+    const tvColor ="#add8e6"
 
-    const { turnOnLamp } = props
+    const { turnOnLamp, turnOnTV } = props
 
-    const { nodes } = useLoader(GLTFLoader, bedroom_model)
-    console.log(nodes)
+    const { nodes } = useLoader(GLTFLoader, bedroomModel)
+    // const vtv = useLoader(TextureLoader, "http://jaanga.github.io/moon/heightmaps/WAC_GLD100_E000N1800_004P-1024x512.png")
+    // if (vtv) {
+    //     vtv.wrapS = vtv.wrapT = THREE.RepeatWrapping;
+    //     vtv.repeat.set(1500, 1500);
+    //     vtv.anisotropy = 16;
+    // }
+    // console.log(vtv)
+    console.log(turnOnTV)
+    console.log(nodes.mat_tv)
+
+    // console.log(nodes)
     return (
         // <primitive
         //     {...props}
@@ -28,6 +41,12 @@ function Bedroom(props) {
         // />
         <>
             <group {...props} dispose={null} scale={[25, 25, 25]}>
+                {/* <mesh>
+                    <meshBasicMaterial
+                        position={[0, 0, 0]}
+                        attach="material"
+                        map={vtv} />
+                </mesh> */}
 
                 {/* Desk */}
                 <mesh
@@ -197,13 +216,15 @@ function Bedroom(props) {
                     position={nodes.khung_tv.position}
                     rotation={nodes.khung_tv.rotation}
                     scale={nodes.khung_tv.scale} />
+
                 <mesh
-                    material={nodes.mat_tv.material}
+                    // material={turnOnTV ? "" : nodes.mat_tv.material}
                     geometry={nodes.mat_tv.geometry}
                     position={nodes.mat_tv.position}
                     rotation={nodes.mat_tv.rotation}
-                    scale={nodes.mat_tv.scale} />
-
+                    scale={nodes.mat_tv.scale} 
+                    material-color={turnOnTV ? tvColor : "#000000"}/>
+                    
                 {/* Lamp */}
                 <mesh
                     castShadow
